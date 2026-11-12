@@ -33,12 +33,12 @@ button,select{font:inherit;color:inherit}
 h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:30px;line-height:1.05;margin:0 0 6px;max-width:16ch}
 .lede{color:var(--muted);font-size:15.5px;line-height:1.4;margin:0}
 .snap{color:var(--muted);font-size:13.5px;line-height:1.4;margin:8px 0 0}
-.menu-wrap{position:relative;margin:0 -18px}.menu-wrap:after{content:'';position:absolute;top:0;right:0;bottom:0;width:28px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none}.menu{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:8px 18px 2px}
-.menu::-webkit-scrollbar{display:none}
-.chip{scroll-snap-align:start;flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px;min-width:148px;text-align:left;cursor:pointer}
-.chip b{display:block;font-size:15px;font-weight:600;margin-bottom:2px}
-.chip em{display:block;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
-.chip.on{border-color:var(--fg);background:#fff;box-shadow:0 0 0 1.5px var(--fg)}
+.toggle{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 0}
+.toggle button{appearance:none;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:8px 4px 7px;text-align:center;cursor:pointer;min-height:58px}
+.toggle button b{display:block;font-size:15px;font-weight:600;line-height:1.15}
+.toggle button em{display:block;font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.01em;color:var(--muted);margin-top:3px;line-height:1.25}
+.toggle button.on{border-color:var(--fg);background:#fff;box-shadow:0 0 0 1.5px var(--fg)}
+.hint{color:var(--muted);font-size:13px;line-height:1.35;margin:8px 0 0}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin:10px 0 6px}
 .cal-head h2{font-family:var(--head);font-weight:500;font-size:24px;margin:0}
 .nav{display:flex;gap:6px}
@@ -50,6 +50,7 @@ h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:30px;
 .cell{appearance:none;background:var(--card);border:1.5px solid var(--line);border-radius:12px;min-height:72px;padding:8px 4px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .cell .d{font-weight:600;font-size:16px;line-height:1}
 .cell .p{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:-.02em}
+.cell .n{font-family:var(--mono);font-size:9px;line-height:1;color:var(--muted);letter-spacing:.02em}
 .cell.low .p{color:var(--low)}
 .cell.mid .p{color:var(--mid)}
 .cell.high .p{color:var(--high)}
@@ -66,6 +67,7 @@ h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:30px;
 .cell.on{background:var(--fg);border-color:var(--fg);color:#FBF9F4}
 .cell.on .d{color:#FBF9F4}
 .cell.on .p{color:#F2B84B}
+.cell.on .n{color:#E7E0D4}
 .cell.on.na{border-style:solid}
 .cell:not(.closed):not(.empty):not(.past):not(.on):active{transform:scale(.97)}
 .legend{display:flex;gap:14px;justify-content:center;margin:14px 0 4px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -126,11 +128,12 @@ details[open] summary:after{content:"–"}
 
   <p class="eyebrow">Kendall’s calendar</p>
   <h1>Book time the way you’d book a flight.</h1>
-  <p class="lede">Four hours a day, Monday through Friday, 9&nbsp;AM to 4&nbsp;PM Pacific, November&nbsp;16 through March&nbsp;5. Weekends are closed. Fares are cheaper further out, and higher when a day is close or filling up.</p>
+  <p class="lede">Four billable hours a day, Monday through Friday, 9&nbsp;AM to 4&nbsp;PM Pacific, November&nbsp;16 through March&nbsp;5. Weekends are closed.</p>
   <p class="snap">Blocked hours come from Kendall’s actual calendar, snapshot November&nbsp;11, 2026. A live version would stay in sync automatically. This draft does not.</p>
 
-  <p class="eyebrow" style="margin-bottom:0">The menu</p>
-  <div class="menu-wrap"><div class="menu" id="menu" role="listbox" aria-label="Offerings"></div></div>
+  <p class="eyebrow" style="margin-bottom:0">Block length</p>
+  <div class="toggle" id="toggle" role="radiogroup" aria-label="Block length"></div>
+  <p class="hint">A block has to fit in one open stretch. Shorter gaps are unused, so open days change with the length.</p>
 
   <div class="cal-head">
     <h2 id="monthLabel"></h2>
@@ -155,7 +158,7 @@ details[open] summary:after{content:"–"}
     <div class="card">
       <h3>Request this seat</h3>
       <dl>
-        <dt>Offering</dt><dd id="cOff"></dd>
+        <dt>Block</dt><dd id="cOff"></dd>
         <dt>When</dt><dd id="cWhen"></dd>
         <dt>Fare</dt><dd id="cFare"></dd>
       </dl>
@@ -165,11 +168,11 @@ details[open] summary:after{content:"–"}
 
   <section class="how">
     <h2>How the fares work</h2>
-    <p>The rare thing being sold is Kendall’s calendar, not a new product for every request. Each offering on the menu takes a set number of hours. The fare for those hours moves the same way an airline fare does, from three numbers:</p>
+    <p>The fare is for one block. It moves the same way an airline fare does, from three numbers. A block also has to fit in a single open stretch between 9&nbsp;AM and 4&nbsp;PM, so a day can be open for 30 minutes and closed for 2 hours.</p>
     <ol>
       <li><strong>How far out you book.</strong> <span>Six weeks ahead is the cheapest. Inside a week, it climbs. Same-day is the walk-up fare, or the seat may already be gone.</span></li>
-      <li><strong>How full that day is.</strong> <span>Each weekday has four hours for sale. Hours already taken raise the fare, and the last open hour carries a last-seat premium.</span></li>
-      <li><strong>How full that week is.</strong> <span>Demand is the share of that week’s hours already taken, leaving out weekends and holidays. A mostly open week stays quiet. A week that is mostly taken runs hot.</span></li>
+      <li><strong>How full that day is for this block.</strong> <span>Four billable hours can be sold. Hours that cannot be packed into a block of the length you picked raise the fare. If none fit, the day is unavailable.</span></li>
+      <li><strong>How full that week is.</strong> <span>Demand is the share of that week’s hours already taken on the November 11 snapshot, leaving out weekends and holidays. It does not change when you switch block length.</span></li>
     </ol>
     <details>
       <summary>The algorithm, in full</summary>
@@ -186,27 +189,37 @@ Lead time (days out, from today’s date)
   1–2    1.65
   same   2.00
 
-Load (hours already held that day, of 4)
+Packing (9:00–16:00, one contiguous gap)
+  blocks = sum of floor(gap ÷ block)
+  then cap at 4 billable hours
+    30 min    at most 8
+    2 hours   at most 2
+    4 hours   at most 1
+  a shorter leftover is unused
+  zero blocks → unavailable, not a fare
+
+Load (whole hours of the 4 this block cannot pack)
   0/4    1.00
   1/4    1.12
   2/4    1.28
   3/4    1.55   last-hour premium
-  4/4    sold out
+  floor(4 − packable hours). Under 1 hour does not step it.
 
-Demand (share of that week already held)
+Demand (snapshot fill, not the block length)
   Quiet   0.90   under 25%
   Normal  1.00   25% up to 50%
   Busy    1.20   50% up to 75%
   Hot     1.40   75% or more
 
 Week capacity is 4 hours times each weekday that is not a holiday.
-Weekends are left out. Fill uses the November 11, 2026 snapshot.
+Held hours for demand are 4 minus that day’s sellable hours on the
+November 11, 2026 snapshot. Weekends are left out.
 
 Base fares ($375 an hour)
-  Working session    $375  ·  1 hour
-  Team session       $750  ·  2 hours
-  AI Ramp Day      $1,500  ·  4 hours</div>
-      <p class="ex">Worked example, so the arithmetic can be checked. A working session, base $375, five days out (lead 1.30), with 2 of 4 hours already held (load 1.28), in a week under 25% held (Quiet, 0.90): $375 × 1.30 × 1.28 × 0.90 = $561.60, which rounds to $550. Six weeks out, on an open Quiet day: $375 × 0.55 × 1.00 × 0.90 = $185.63, which rounds to $175.</p>
+  30 minutes    $187.50
+  2 hours         $750
+  4 hours       $1,500   a full day’s billable capacity</div>
+      <p class="ex">Worked example, so the arithmetic can be checked. A 30-minute block, base $187.50, five days out (lead 1.30), with 1 of 4 hours not packable (load 1.12), in a week under 25% held (Quiet, 0.90): $187.50 × 1.30 × 1.12 × 0.90 = $245.70, which rounds to $250.</p>
       <p class="ex" id="liveEx"></p>
       <p class="ex">Closed on this calendar: Thanksgiving (Nov 26–27), Christmas Eve and Christmas (Dec 24–25), New Year’s Eve and New Year’s Day (Dec 31–Jan 1), MLK Day (Jan 18), and Presidents’ Day (Feb 15). Weekends are closed. Held hours and weekly demand come from the November 11 snapshot, not from a simulation. A live version would recalculate from the calendar automatically. This draft does not.</p>
     </details>
@@ -228,8 +241,8 @@ Base fares ($375 an hour)
 (function(){
   // Public inventory only: date, sellable hours, anonymous blocked ranges, holiday names.
   // Event titles, guests, and descriptions are not in this file.
-  // Sellable hours already ignore short busy stretches that still leave four billable
-  // hours somewhere in 09:00–16:00. held for the fare = 4 − sellable.
+  // Availability is packed from those blocked ranges inside 09:00–16:00.
+  // Weekly demand still uses the snapshot sellable count (held = 4 − sellable).
   const SNAPSHOT = {
   "snapshot": "2026-11-11T20:15:00-08:00",
   "range": {
@@ -1339,10 +1352,12 @@ Base fares ($375 an hour)
   const TZ = 'America/Los_Angeles';
   const RANGE_START = SNAPSHOT.range.start;
   const RANGE_END = SNAPSHOT.range.end;
-  const OFFERS = [
-    {id:'work', name:'Working session', hours:1, base:375, blurb:'1 hour  ·  base $375'},
-    {id:'team', name:'Team session', hours:2, base:750, blurb:'2 hours  ·  base $750'},
-    {id:'ramp', name:'AI Ramp Day', hours:4, base:1500, blurb:'4 hours  ·  base $1,500'}
+  const WINDOW_START = 9 * 60;
+  const WINDOW_END = 16 * 60;
+  const SIZES = [
+    {id:'30', name:'30 min', minutes:30, base:187.5, unit:'30 minutes', hint:'$187.50'},
+    {id:'2h', name:'2 hours', minutes:120, base:750, unit:'2 hours', hint:'$750'},
+    {id:'4h', name:'4 hours', minutes:240, base:1500, unit:'4 hours', hint:'Full day', hint2:'$1,500'}
   ];
   const LEAD = [[42,.55],[28,.65],[14,.80],[7,1],[3,1.30],[1,1.65],[0,2]];
   const LOAD = [1, 1.12, 1.28, 1.55];
@@ -1390,6 +1405,10 @@ Base fares ($375 an hour)
     const w=weekday(ymd);
     return addDays(ymd, w===0 ? -6 : 1-w);
   }
+  function toMin(hm){
+    const parts=hm.split(':');
+    return (+parts[0])*60 + (+parts[1]);
+  }
   function cleanBlocks(list){
     if(!Array.isArray(list)) return [];
     const out=[];
@@ -1405,8 +1424,56 @@ Base fares ($375 an hour)
     if(!rec) return null;
     if(rec.w) return {kind:'weekend', s:0, held:0, blocks:[]};
     if(rec.h) return {kind:'holiday', name:String(rec.h), s:0, held:0, blocks:[]};
-    const s=rec.s;
-    return {kind:'day', s:s, held:4-s, blocks:cleanBlocks(rec.b)};
+    return {kind:'day', s:rec.s, held:4-rec.s, blocks:cleanBlocks(rec.b)};
+  }
+  // Free gaps are the complement of blocked ranges inside 09:00–16:00.
+  // A block must sit in one gap. Count is the sum of floor(gap / block),
+  // then capped so booked hours cannot exceed 4.
+  function freeGaps(blocks){
+    const busy=[];
+    blocks.forEach(function(b){
+      let start=toMin(b.start), end=toMin(b.end);
+      if(end<=WINDOW_START || start>=WINDOW_END) return;
+      start=Math.max(start, WINDOW_START);
+      end=Math.min(end, WINDOW_END);
+      if(end>start) busy.push({start:start, end:end});
+    });
+    busy.sort(function(a,b){ return a.start-b.start; });
+    const merged=[];
+    busy.forEach(function(b){
+      const last=merged[merged.length-1];
+      if(last && b.start<=last.end) last.end=Math.max(last.end, b.end);
+      else merged.push({start:b.start, end:b.end});
+    });
+    const gaps=[];
+    let cursor=WINDOW_START;
+    merged.forEach(function(b){
+      if(b.start>cursor) gaps.push({start:cursor, end:b.start});
+      cursor=Math.max(cursor, b.end);
+    });
+    if(cursor<WINDOW_END) gaps.push({start:cursor, end:WINDOW_END});
+    return gaps;
+  }
+  function packDay(blocks, minutes){
+    const gaps=freeGaps(blocks);
+    const maxBlocks=Math.floor((4*60)/minutes);
+    let raw=0, longest=0;
+    gaps.forEach(function(g){
+      const len=g.end-g.start;
+      if(len>longest) longest=len;
+      raw+=Math.floor(len/minutes);
+    });
+    const n=Math.min(raw, maxBlocks);
+    return {blocks:n, rawBlocks:raw, packableHours:n*minutes/60, gaps:gaps, longest:longest};
+  }
+  function loadIndexFromPackable(hours){
+    // Whole hours of the 4 that this block size cannot pack.
+    // floor: a leftover under one hour does not step the load.
+    // Used only when at least one block fits, so the index stays 0–3.
+    const idx=Math.floor((4-hours)+1e-9);
+    if(idx<0) return 0;
+    if(idx>3) return 3;
+    return idx;
   }
   function weekFill(ymd){
     const start=weekStart(ymd);
@@ -1420,9 +1487,9 @@ Base fares ($375 an hour)
     return cap ? held/cap : 0;
   }
   function demandIndex(ymd){
-    // Demand is this week's real fill, not a simulation.
+    // Demand is this week's snapshot fill, not a simulation, and not the block size.
     // fill = held hours / capacity. Capacity is 4 hours for each weekday
-    // that is not a holiday. Weekends are excluded from the week.
+    // that is not a holiday. Weekends are excluded. held = 4 − sellable.
     //   fill < 0.25 → Quiet  (mostly open)
     //   fill < 0.50 → Normal
     //   fill < 0.75 → Busy
@@ -1450,11 +1517,16 @@ Base fares ($375 an hour)
   function fmtShort(ymd){
     return parseYmd(ymd).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   }
-  function fmtClock(hm){
-    const parts=hm.split(':');
-    const H=+parts[0], M=+parts[1];
+  function fmtMin(mins){
+    const H=Math.floor(mins/60), M=mins%60;
     const h=H%12||12;
     return h+':'+String(M).padStart(2,'0')+' '+(H<12?'AM':'PM');
+  }
+  function fmtSpan(mins){
+    const h=Math.floor(mins/60), m=mins%60;
+    if(!h) return m+' minute'+(m===1?'':'s');
+    if(!m) return h+' hour'+(h===1?'':'s');
+    return h+' hour'+(h===1?'':'s')+' '+m+' minute'+(m===1?'':'s');
   }
   function leadPhrase(ymd){
     const n=daysOut(ymd);
@@ -1462,24 +1534,36 @@ Base fares ($375 an hour)
     if(n===1) return '1 day out';
     return n+' days out';
   }
-  function dayQuote(off, ymd){
+  function blockWord(sz, n){
+    const name=sz.minutes===30 ? '30-minute block' : sz.minutes===120 ? '2-hour block' : '4-hour block';
+    return n===1 ? name : name+'s';
+  }
+  function dayQuote(sz, ymd){
     if(ymd<RANGE_START || ymd>RANGE_END || !isWeekday(ymd)) return {status:'closed', label:''};
     const info=dayInfo(ymd);
     if(!info || info.kind==='weekend') return {status:'closed', label:''};
     if(info.kind==='holiday') return {status:'closed', label:'Closed', name:info.name};
     if(ymd<firstOpenYmd()) return {status:'past', label:'Past'};
-    if(info.s<=0) return {status:'sold', label:'Full', s:0, held:4, blocks:info.blocks};
-    // A longer offering is unavailable when the day does not have enough hours left for sale.
-    if(off.hours>info.s) return {status:'short', s:info.s, held:info.held, blocks:info.blocks};
-    const price=fareFor(off.base, ymd, info.held);
-    return {status:'open', price:price, s:info.s, held:info.held, blocks:info.blocks};
+    const packed=packDay(info.blocks, sz.minutes);
+    const quote={
+      blocks:packed.blocks,
+      rawBlocks:packed.rawBlocks,
+      packableHours:packed.packableHours,
+      gaps:packed.gaps,
+      longest:packed.longest,
+      blocked:info.blocks
+    };
+    if(packed.blocks<=0) return Object.assign(quote, {status:'none'});
+    const loadHeld=loadIndexFromPackable(packed.packableHours);
+    const price=fareFor(sz.base, ymd, loadHeld);
+    return Object.assign(quote, {status:'open', price:price, loadHeld:loadHeld});
   }
 
-  let offer=OFFERS[0];
+  let size=SIZES[0];
   let selectedDate=null;
   let selectedPrice=null;
 
-  const menuEl=document.getElementById('menu');
+  const toggleEl=document.getElementById('toggle');
   const gridEl=document.getElementById('grid');
   const monthLabel=document.getElementById('monthLabel');
   const prev=document.getElementById('prev');
@@ -1516,7 +1600,7 @@ Base fares ($375 an hour)
     const prices=[];
     let scan=RANGE_START;
     while(scan<=RANGE_END){
-      const q=dayQuote(offer, scan);
+      const q=dayQuote(size, scan);
       if(q.status==='open') prices.push(q.price);
       scan=addDays(scan,1);
     }
@@ -1548,32 +1632,34 @@ Base fares ($375 an hour)
     for(let i=1;i<firstDow;i++) cells.push(null);
     return cells.concat(shown);
   }
-  function placementLine(){
-    const unit=offer.hours===1 ? '1 hour' : offer.hours+' hours';
-    return unit+', placed between 9 AM and 4 PM';
+  function countPhrase(q, sz){
+    const n=q.blocks;
+    let text=n+' '+blockWord(sz, n)+' '+(n===1?'fits':'fit');
+    if(q.rawBlocks>n) text+=', capped at 4 billable hours';
+    return text;
   }
 
-  function renderMenu(){
-    menuEl.replaceChildren();
-    OFFERS.forEach(function(o){
-      const b=el('button', 'chip'+(o.id===offer.id?' on':''));
+  function renderToggle(){
+    toggleEl.replaceChildren();
+    SIZES.forEach(function(sz){
+      const b=el('button', sz.id===size.id?'on':'');
       b.type='button';
-      b.setAttribute('role','option');
-      b.setAttribute('aria-selected', o.id===offer.id ? 'true' : 'false');
-      b.dataset.offer=o.id;
-      b.append(el('b', null, o.name), el('em', null, o.blurb));
+      b.setAttribute('role','radio');
+      b.setAttribute('aria-checked', sz.id===size.id ? 'true' : 'false');
+      b.dataset.size=sz.id;
+      b.append(el('b', null, sz.name), el('em', null, sz.hint));
+      if(sz.hint2) b.append(el('em', null, sz.hint2));
       b.onclick=function(){
-        offer=o;
+        if(size.id===sz.id) return;
+        size=sz;
         confirmEl.classList.remove('on');
         if(selectedDate){
-          const q=dayQuote(offer, selectedDate);
-          if(q.status==='open') selectedPrice=q.price;
-          else if(q.status==='short') selectedPrice=null;
-          else { selectedDate=null; selectedPrice=null; }
+          const q=dayQuote(size, selectedDate);
+          selectedPrice=q.status==='open' ? q.price : null;
         }
         render();
       };
-      menuEl.appendChild(b);
+      toggleEl.appendChild(b);
     });
   }
 
@@ -1596,31 +1682,39 @@ Base fares ($375 an hour)
         gridEl.appendChild(b);
         return;
       }
-      const q=dayQuote(offer, ymd);
+      const q=dayQuote(size, ymd);
       const num=el('span', 'd', String(parseYmd(ymd).getDate()));
       const p=el('span', 'p');
       b.dataset.date=ymd;
       b.dataset.status=q.status;
+      if(q.blocks!=null) b.dataset.blocks=String(q.blocks);
       if(q.status==='open'){
         b.className='cell '+fareColor(q.price, span.lo, span.hi)+(selectedDate===ymd?' on':'');
         p.textContent=money(q.price);
-        b.setAttribute('aria-label', fmtDate(ymd)+', '+money(q.price)+', '+q.s+' of 4 hours open');
+        b.dataset.price=String(q.price);
+        const n=el('span', 'n', q.blocks+' left');
+        b.setAttribute('aria-label', fmtDate(ymd)+', '+money(q.price)+', '+q.blocks+' '+blockWord(size, q.blocks)+' left');
         b.onclick=function(){ selectDay(ymd, true); };
-      } else if(q.status==='short'){
+        b.append(num, p, n);
+      } else if(q.status==='none'){
         b.className='cell na'+(selectedDate===ymd?' on':'');
-        p.textContent=q.s+' open';
-        b.setAttribute('aria-label', fmtDate(ymd)+', only '+q.s+' hours open, not enough for '+offer.name);
+        p.textContent='No fit';
+        b.dataset.blocks='0';
+        b.setAttribute('aria-label', fmtDate(ymd)+', no '+size.unit+' block fits');
         b.onclick=function(){ selectDay(ymd, true); };
+        b.append(num, p);
       } else if(q.status==='past'){
         b.className='cell past';
         b.disabled=true;
         p.textContent='Past';
         b.setAttribute('aria-label', fmtDate(ymd)+', past');
+        b.append(num, p);
       } else if(q.status==='sold'){
         b.className='cell closed';
         b.disabled=true;
         p.textContent='Full';
         b.setAttribute('aria-label', fmtDate(ymd)+', full');
+        b.append(num, p);
       } else {
         b.className='cell closed';
         b.disabled=true;
@@ -1628,81 +1722,89 @@ Base fares ($375 an hour)
         const holiday=q.name ? ', '+q.name : '';
         b.setAttribute('aria-label', fmtDate(ymd)+(q.label==='Closed' ? ', closed'+holiday : ''));
         if(q.name) b.title=q.name;
+        b.append(num, p);
       }
-      b.append(num, p);
       gridEl.appendChild(b);
     });
   }
 
+  function addRangeRow(label, start, end){
+    const b=el('button', 'slot held');
+    b.type='button';
+    b.disabled=true;
+    b.append(el('span', 't', fmtMin(start)+' – '+fmtMin(end)), el('span', 'pr', label));
+    slotsEl.appendChild(b);
+  }
+
   function renderDay(){
     if(!selectedDate){ dayPanel.hidden=true; return; }
-    const q=dayQuote(offer, selectedDate);
-    if(q.status!=='open' && q.status!=='short'){ dayPanel.hidden=true; return; }
+    const q=dayQuote(size, selectedDate);
+    if(q.status!=='open' && q.status!=='none'){ dayPanel.hidden=true; return; }
     dayPanel.hidden=false;
     dayTitle.textContent=fmtDate(selectedDate);
     const dem=DEMAND_NAME[demandIndex(selectedDate)];
-    if(q.status==='short'){
-      dayMeta.textContent=offer.name+' needs '+offer.hours+' open hours. This day has '+q.s+' of 4. '+dem+' week.';
+    if(q.status==='none'){
+      let why='No '+blockWord(size, 1)+' fits.';
+      if(q.longest>0) why+=' The longest open stretch is '+fmtSpan(q.longest)+'.';
+      else why+=' The day is blocked from 9 AM to 4 PM.';
+      dayMeta.textContent=why+' '+dem+' week.';
     } else {
-      let meta=q.s+' of 4 hours open. '+dem+' week. '+leadPhrase(selectedDate)+'.';
-      if(q.held===0 && q.blocks.length) meta+=' Blocked time below still leaves four billable hours.';
+      let meta=countPhrase(q, size)+'. '+dem+' week. '+leadPhrase(selectedDate)+'.';
+      if(size.minutes===240) meta+=' That is the day’s billable capacity.';
       dayMeta.textContent=meta;
     }
     slotsEl.replaceChildren();
     if(q.status==='open'){
       const b=el('button', 'slot on');
       b.type='button';
-      const t=el('span', 't', offer.name);
-      t.appendChild(el('span', 'sub', placementLine()));
+      const t=el('span', 't', size.unit);
+      t.appendChild(el('span', 'sub', 'One block, placed in an open gap'));
       b.append(t, el('span', 'pr', money(q.price)));
       b.setAttribute('aria-pressed','true');
       slotsEl.appendChild(b);
     }
-    q.blocks.forEach(function(range){
-      const b=el('button', 'slot held');
-      b.type='button';
-      b.disabled=true;
-      b.append(
-        el('span', 't', fmtClock(range.start)+' – '+fmtClock(range.end)),
-        el('span', 'pr', 'Blocked')
-      );
-      slotsEl.appendChild(b);
+    const showOpen=q.status==='none' || (q.blocked && q.blocked.length);
+    if(showOpen){
+      q.gaps.forEach(function(g){ addRangeRow('Open', g.start, g.end); });
+    }
+    (q.blocked||[]).forEach(function(range){
+      addRangeRow('Blocked', toMin(range.start), toMin(range.end));
     });
   }
 
   function renderDock(){
-    const q=selectedDate ? dayQuote(offer, selectedDate) : null;
+    const q=selectedDate ? dayQuote(size, selectedDate) : null;
     if(q && q.status==='open' && selectedPrice!=null){
       dockPrice.textContent=money(selectedPrice);
-      dockSub.textContent=offer.name+' · '+fmtShort(selectedDate);
+      dockSub.textContent=size.name+' · '+fmtShort(selectedDate)+' · '+q.blocks+' left';
       cta.disabled=false;
-    } else if(q && q.status==='short'){
-      dockPrice.textContent='Not enough hours';
-      dockSub.textContent=offer.name+' needs '+offer.hours+' · '+q.s+' open '+fmtShort(selectedDate);
+    } else if(q && q.status==='none'){
+      dockPrice.textContent='No fit';
+      dockSub.textContent=size.name+' · '+fmtShort(selectedDate);
       cta.disabled=true;
     } else {
       dockPrice.textContent='Choose a date';
-      dockSub.textContent=offer.name+' · fares in Pacific time';
+      dockSub.textContent=size.name+' · fares in Pacific time';
       cta.disabled=true;
     }
   }
 
   function renderExample(){
-    const samples=['2026-11-17','2026-12-15','2027-03-05'];
+    const samples=['2026-11-16','2026-11-17','2026-11-19'];
     const bits=samples.map(function(ymd){
-      const q=dayQuote(OFFERS[0], ymd);
-      const when=fmtDate(ymd);
-      if(q.status==='open') return money(q.price)+' on '+when+' ('+q.s+' of 4 hours open)';
+      const q=dayQuote(size, ymd);
+      const when=fmtShort(ymd);
+      if(q.status==='open') return when+' '+money(q.price)+', '+q.blocks+' '+blockWord(size, q.blocks);
+      if(q.status==='none') return when+' unavailable';
       if(q.status==='past') return when+' has passed';
-      if(q.status==='short') return when+' does not have enough open hours';
       if(q.status==='closed') return when+' is closed';
       return when+' is full';
     });
-    liveEx.textContent='On this page right now, a working session is '+bits[0]+', '+bits[1]+', and '+bits[2]+'. Lead time is counted from today’s date, in Pacific time.';
+    liveEx.textContent='With '+size.unit+' selected right now: '+bits[0]+'; '+bits[1]+'; '+bits[2]+'. Lead time is counted from today’s date, in Pacific time.';
   }
 
   function render(){
-    renderMenu();
+    renderToggle();
     renderGrid();
     renderDay();
     renderDock();
@@ -1711,7 +1813,7 @@ Base fares ($375 an hour)
 
   function selectDay(ymd, scroll){
     selectedDate=ymd;
-    const q=dayQuote(offer, ymd);
+    const q=dayQuote(size, ymd);
     selectedPrice=q.status==='open' ? q.price : null;
     confirmEl.classList.remove('on');
     render();
@@ -1733,10 +1835,9 @@ Base fares ($375 an hour)
 
   cta.onclick=function(){
     if(cta.disabled || selectedPrice==null || !selectedDate) return;
-    document.getElementById('cOff').textContent=offer.name;
+    document.getElementById('cOff').textContent=size.unit;
     const whenEl=document.getElementById('cWhen');
-    const unit=offer.hours===1 ? '1 hour' : offer.hours+' hours';
-    whenEl.replaceChildren(fmtShort(selectedDate), document.createElement('br'), unit+', 9 AM–4 PM PT');
+    whenEl.replaceChildren(fmtShort(selectedDate), document.createElement('br'), size.unit+', 9 AM–4 PM PT');
     document.getElementById('cFare').textContent=money(selectedPrice);
     confirmEl.classList.add('on');
     confirmEl.scrollIntoView({behavior:'smooth', block:'center'});
