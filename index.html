@@ -24,22 +24,22 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);
 body{padding-bottom:calc(168px + var(--safe-b))}
 button,select{font:inherit;color:inherit}
 .wrap{max-width:430px;margin:0 auto;padding:0 18px}
-.draft{display:flex;justify-content:center;padding:10px 18px 0}
-.draft span{pointer-events:none;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);background:var(--card);padding:6px 9px;border-radius:6px}
-.top{display:flex;align-items:center;justify-content:space-between;min-height:56px;border-bottom:1.5px solid var(--fg);padding-top:8px;margin-bottom:8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;border-bottom:1.5px solid var(--fg);padding-top:8px;margin-bottom:2px}
+.draft-pill{pointer-events:none;font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);background:var(--card);padding:5px 7px;border-radius:6px;flex-shrink:0}
 .brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-size:19px;font-weight:500}
 .mark{width:22px;height:22px;border-radius:50%;background:var(--accent);position:relative;flex-shrink:0}
 .mark:after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--bg)}
-.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
-h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:34px;line-height:1.08;margin:0 0 14px;max-width:14ch}
-.lede{color:var(--muted);font-size:16.5px;line-height:1.5;margin:0 0 8px}
-.menu-wrap{position:relative;margin:0 -18px}.menu-wrap:after{content:'';position:absolute;top:18px;right:0;bottom:8px;width:28px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none}.menu{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:18px 18px 8px}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px}
+h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:30px;line-height:1.05;margin:0 0 6px;max-width:16ch}
+.lede{color:var(--muted);font-size:15.5px;line-height:1.4;margin:0}
+.snap{color:var(--muted);font-size:13.5px;line-height:1.4;margin:8px 0 0}
+.menu-wrap{position:relative;margin:0 -18px}.menu-wrap:after{content:'';position:absolute;top:0;right:0;bottom:0;width:28px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none}.menu{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:8px 18px 2px}
 .menu::-webkit-scrollbar{display:none}
-.chip{scroll-snap-align:start;flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px 13px;min-width:154px;text-align:left;cursor:pointer}
+.chip{scroll-snap-align:start;flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px;min-width:148px;text-align:left;cursor:pointer}
 .chip b{display:block;font-size:15px;font-weight:600;margin-bottom:2px}
 .chip em{display:block;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
 .chip.on{border-color:var(--fg);background:#fff;box-shadow:0 0 0 1.5px var(--fg)}
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:10px 0 6px}
 .cal-head h2{font-family:var(--head);font-weight:500;font-size:24px;margin:0}
 .nav{display:flex;gap:6px}
 .nav button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--fg);background:transparent;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
@@ -57,9 +57,17 @@ h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:34px;
 .cell.closed{background:var(--bg);border:1.5px dashed var(--line);cursor:default}
 .cell.closed .p{color:var(--muted);font-size:9px;letter-spacing:.04em;text-transform:uppercase}
 .cell.closed .d{color:var(--muted)}
+.cell.na{background:var(--bg);border:1.5px dashed var(--line);cursor:pointer}
+.cell.na .d{color:var(--muted)}
+.cell.na .p{color:var(--muted);font-size:10px;letter-spacing:.01em}
+.cell.past{background:transparent;border-color:transparent;cursor:default}
+.cell.past .d,.cell.past .p{color:var(--muted)}
+.cell.past .p{font-size:9px;letter-spacing:.04em;text-transform:uppercase}
 .cell.on{background:var(--fg);border-color:var(--fg);color:#FBF9F4}
+.cell.on .d{color:#FBF9F4}
 .cell.on .p{color:#F2B84B}
-.cell:not(.closed):not(.empty):not(.on):active{transform:scale(.97)}
+.cell.on.na{border-style:solid}
+.cell:not(.closed):not(.empty):not(.past):not(.on):active{transform:scale(.97)}
 .legend{display:flex;gap:14px;justify-content:center;margin:14px 0 4px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
 .legend .l{background:var(--low)}
@@ -70,10 +78,11 @@ h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:34px;
 .meta{color:var(--muted);font-size:14px;margin:0 0 16px}
 .slots{display:flex;flex-direction:column;gap:8px}
 .slot{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;width:100%;text-align:left;min-height:58px}
-.slot .t{font-weight:600;font-size:16px;flex:1}
+.slot .t{font-weight:600;font-size:16px;flex:1;min-width:0}
+.slot .sub{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:2px;line-height:1.35}
 .slot .pr{font-family:var(--mono);font-size:15px;font-weight:500}
 .slot.on{border-color:var(--fg);box-shadow:0 0 0 1.5px var(--fg);background:#fff}
-.slot.held{cursor:default;opacity:.55}
+.slot.held{cursor:default;opacity:.72}
 .slot.held .pr{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .how{margin:36px 0 20px;border-top:1.5px solid var(--fg);padding-top:28px}
 .how h2{font-family:var(--head);font-weight:500;font-size:28px;margin:0 0 12px;max-width:16ch}
@@ -109,15 +118,16 @@ details[open] summary:after{content:"–"}
 </style>
 </head>
 <body>
-<div class="draft"><span>Draft for review</span></div>
 <div class="wrap">
   <div class="top">
     <div class="brand"><span class="mark"></span>Frontier School</div>
+    <span class="draft-pill">Draft for review</span>
   </div>
 
   <p class="eyebrow">Kendall’s calendar</p>
   <h1>Book time the way you’d book a flight.</h1>
-  <p class="lede">Four hours a day, Monday through Friday, 9&nbsp;AM to 4&nbsp;PM Pacific. Pick what you need from the menu, then pick a date. Fares are cheaper further out, and higher when a day is filling up or the date is close.</p>
+  <p class="lede">Four hours a day, Monday through Friday, 9&nbsp;AM to 4&nbsp;PM Pacific, November&nbsp;16 through March&nbsp;5. Weekends are closed. Fares are cheaper further out, and higher when a day is close or filling up.</p>
+  <p class="snap">Blocked hours come from Kendall’s actual calendar, snapshot November&nbsp;11, 2026. A live version would stay in sync automatically. This draft does not.</p>
 
   <p class="eyebrow" style="margin-bottom:0">The menu</p>
   <div class="menu-wrap"><div class="menu" id="menu" role="listbox" aria-label="Offerings"></div></div>
@@ -158,8 +168,8 @@ details[open] summary:after{content:"–"}
     <p>The rare thing being sold is Kendall’s calendar, not a new product for every request. Each offering on the menu takes a set number of hours. The fare for those hours moves the same way an airline fare does, from three numbers:</p>
     <ol>
       <li><strong>How far out you book.</strong> <span>Six weeks ahead is the cheapest. Inside a week, it climbs. Same-day is the walk-up fare, or the seat may already be gone.</span></li>
-      <li><strong>How full that day is.</strong> <span>Each weekday has four hours for sale. The last open hour on a day carries a last-seat premium.</span></li>
-      <li><strong>How much demand that week is seeing.</strong> <span>A quiet week stays closer to the advance fare. A week that’s filling fast moves up, even if you book it early.</span></li>
+      <li><strong>How full that day is.</strong> <span>Each weekday has four hours for sale. Hours already taken raise the fare, and the last open hour carries a last-seat premium.</span></li>
+      <li><strong>How full that week is.</strong> <span>Demand is the share of that week’s hours already taken, leaving out weekends and holidays. A mostly open week stays quiet. A week that is mostly taken runs hot.</span></li>
     </ol>
     <details>
       <summary>The algorithm, in full</summary>
@@ -167,7 +177,7 @@ details[open] summary:after{content:"–"}
 floor: 45% of base
 ceiling: 3× base
 
-Lead time (days out)
+Lead time (days out, from today’s date)
   42+    0.55
   28–41  0.65
   14–27  0.80
@@ -183,19 +193,22 @@ Load (hours already held that day, of 4)
   3/4    1.55   last-hour premium
   4/4    sold out
 
-Demand (that week’s pace)
-  Quiet  0.90
-  Normal 1.00
-  Busy   1.20
-  Hot    1.40
+Demand (share of that week already held)
+  Quiet   0.90   under 25%
+  Normal  1.00   25% up to 50%
+  Busy    1.20   50% up to 75%
+  Hot     1.40   75% or more
 
-Base fares (Reid defaults)
+Week capacity is 4 hours times each weekday that is not a holiday.
+Weekends are left out. Fill uses the November 11, 2026 snapshot.
+
+Base fares ($375 an hour)
   Working session    $375  ·  1 hour
-  Alumni hour        $250  ·  1 hour  (Intensive graduates)
   Team session       $750  ·  2 hours
-  AI Ramp Day      $1,500  ·  4 hours (full day’s capacity)</div>
-      <p class="ex">Example: a working session, base $375. Six weeks out, on a quiet empty day: $375 × 0.55 × 1.00 × 0.90 = $186, rounds to $175. Two days out, last hour on a busy day: $375 × 1.65 × 1.55 × 1.20 = $1,151, capped at 3× to $1,125.</p>
-      <p class="ex">The calendar in this draft is a live demo of that formula. Held seats and weekly demand are simulated so you can see the range. In production, held seats would be real bookings, and demand would be the actual pace of inquiries against remaining hours that week. Closed days in this draft: Thanksgiving (Nov 26–27), Christmas (Dec 24–25), New Year’s Day (Jan 1).</p>
+  AI Ramp Day      $1,500  ·  4 hours</div>
+      <p class="ex">Worked example, so the arithmetic can be checked. A working session, base $375, five days out (lead 1.30), with 2 of 4 hours already held (load 1.28), in a week under 25% held (Quiet, 0.90): $375 × 1.30 × 1.28 × 0.90 = $561.60, which rounds to $550. Six weeks out, on an open Quiet day: $375 × 0.55 × 1.00 × 0.90 = $185.63, which rounds to $175.</p>
+      <p class="ex" id="liveEx"></p>
+      <p class="ex">Closed on this calendar: Thanksgiving (Nov 26–27), Christmas Eve and Christmas (Dec 24–25), New Year’s Eve and New Year’s Day (Dec 31–Jan 1), MLK Day (Jan 18), and Presidents’ Day (Feb 15). Weekends are closed. Held hours and weekly demand come from the November 11 snapshot, not from a simulation. A live version would recalculate from the calendar automatically. This draft does not.</p>
     </details>
   </section>
 </div>
@@ -203,117 +216,1229 @@ Base fares (Reid defaults)
 <div class="dock">
   <div class="dock-inner">
     <div class="sum">
-      <b id="dockPrice">Choose a date</b>
+      <b id="dockPrice" aria-live="polite">Choose a date</b>
       <s id="dockSub">Fares shown in Pacific time</s>
     </div>
-    <button class="cta" id="cta" disabled>Request this seat</button>
+    <button class="cta" id="cta" type="button" disabled>Request this seat</button>
   </div>
 </div>
-<div class="toast" id="toast">Request noted on this draft. Nothing was sent or charged.</div>
+<div class="toast" id="toast" role="status">Request noted on this draft. Nothing was sent or charged.</div>
 
 <script>
 (function(){
+  // Public inventory only: date, sellable hours, anonymous blocked ranges, holiday names.
+  // Event titles, guests, and descriptions are not in this file.
+  // Sellable hours already ignore short busy stretches that still leave four billable
+  // hours somewhere in 09:00–16:00. held for the fare = 4 − sellable.
+  const SNAPSHOT = {
+  "snapshot": "2026-11-11T20:15:00-08:00",
+  "range": {
+    "start": "2026-11-16",
+    "end": "2027-03-05"
+  },
+  "days": [
+    {
+      "d": "2026-11-16",
+      "s": 3,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "11:00",
+          "end": "14:20"
+        }
+      ],
+      "held": 1
+    },
+    {
+      "d": "2026-11-17",
+      "s": 2,
+      "b": [
+        {
+          "start": "11:00",
+          "end": "14:20"
+        },
+        {
+          "start": "14:40",
+          "end": "16:00"
+        }
+      ],
+      "held": 2
+    },
+    {
+      "d": "2026-11-18",
+      "s": 3,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "11:00",
+          "end": "14:20"
+        }
+      ],
+      "held": 1
+    },
+    {
+      "d": "2026-11-19",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2026-11-20",
+      "s": 4,
+      "b": [
+        {
+          "start": "11:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2026-11-21",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-11-22",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-11-23",
+      "s": 3,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "11:00",
+          "end": "14:20"
+        }
+      ],
+      "held": 1
+    },
+    {
+      "d": "2026-11-24",
+      "s": 3,
+      "b": [
+        {
+          "start": "11:00",
+          "end": "14:20"
+        }
+      ],
+      "held": 1
+    },
+    {
+      "d": "2026-11-25",
+      "s": 3,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "11:00",
+          "end": "14:20"
+        }
+      ],
+      "held": 1
+    },
+    {
+      "d": "2026-11-26",
+      "s": 0,
+      "h": "Thanksgiving"
+    },
+    {
+      "d": "2026-11-27",
+      "s": 0,
+      "h": "Thanksgiving Friday"
+    },
+    {
+      "d": "2026-11-28",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-11-29",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-11-30",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-01",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-02",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-03",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "14:30",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-04",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-05",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-06",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-07",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-08",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "14:40",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-09",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-10",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-11",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-12",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-13",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-14",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-15",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-16",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-17",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-18",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-19",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-20",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-21",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-22",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-23",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-24",
+      "s": 0,
+      "h": "Christmas Eve"
+    },
+    {
+      "d": "2026-12-25",
+      "s": 0,
+      "h": "Christmas Day"
+    },
+    {
+      "d": "2026-12-26",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-27",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2026-12-28",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-29",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-30",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2026-12-31",
+      "s": 0,
+      "h": "New Year's Eve"
+    },
+    {
+      "d": "2027-01-01",
+      "s": 0,
+      "h": "New Year's Day"
+    },
+    {
+      "d": "2027-01-02",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-03",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-04",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-05",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-06",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-07",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-08",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-09",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-10",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-11",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-12",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-13",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-14",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-15",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-16",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-17",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-18",
+      "s": 0,
+      "h": "Martin Luther King Jr. Day"
+    },
+    {
+      "d": "2027-01-19",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-20",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-21",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-22",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-23",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-24",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-25",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-26",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-27",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-28",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-29",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-01-30",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-01-31",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-01",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-02",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-03",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-04",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-05",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-06",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-07",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-08",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-09",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-10",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-11",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-12",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-13",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-14",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-15",
+      "s": 0,
+      "h": "Presidents’ Day"
+    },
+    {
+      "d": "2027-02-16",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-17",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-18",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-19",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-20",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-21",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-22",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-23",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-24",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-25",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-26",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    },
+    {
+      "d": "2027-02-27",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-02-28",
+      "s": 0,
+      "w": 1
+    },
+    {
+      "d": "2027-03-01",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-03-02",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-03-03",
+      "s": 4,
+      "b": [
+        {
+          "start": "09:00",
+          "end": "09:15"
+        },
+        {
+          "start": "13:50",
+          "end": "14:20"
+        }
+      ]
+    },
+    {
+      "d": "2027-03-04",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:50",
+          "end": "14:20"
+        },
+        {
+          "start": "15:00",
+          "end": "16:00"
+        }
+      ]
+    },
+    {
+      "d": "2027-03-05",
+      "s": 4,
+      "b": [
+        {
+          "start": "13:00",
+          "end": "13:30"
+        }
+      ]
+    }
+  ]
+};
+
   const TZ = 'America/Los_Angeles';
+  const RANGE_START = SNAPSHOT.range.start;
+  const RANGE_END = SNAPSHOT.range.end;
   const OFFERS = [
     {id:'work', name:'Working session', hours:1, base:375, blurb:'1 hour  ·  base $375'},
-    {id:'alumni', name:'Alumni hour', hours:1, base:250, blurb:'1 hour  ·  base $250'},
     {id:'team', name:'Team session', hours:2, base:750, blurb:'2 hours  ·  base $750'},
     {id:'ramp', name:'AI Ramp Day', hours:4, base:1500, blurb:'4 hours  ·  base $1,500'}
   ];
-  const SLOTS = [9,10,11,12,13,14,15];
-  const CLOSED = new Set(['2026-11-26','2026-11-27','2026-12-24','2026-12-25','2027-01-01']);
   const LEAD = [[42,.55],[28,.65],[14,.80],[7,1],[3,1.30],[1,1.65],[0,2]];
   const LOAD = [1, 1.12, 1.28, 1.55];
   const DEMAND = [0.90, 1.00, 1.20, 1.40];
   const DEMAND_NAME = ['Quiet','Normal','Busy','Hot'];
+  const HM = /^\d{2}:\d{2}$/;
+
+  const BY_DAY = Object.create(null);
+  SNAPSHOT.days.forEach(function(day){ BY_DAY[day.d] = day; });
 
   const now = new Date();
+
   function ymdInTZ(d){
     return new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
   }
   function hourInTZ(d){
     const p=new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',hourCycle:'h23'}).formatToParts(d);
-    return +p.find(x=>x.type==='hour').value;
+    return +p.find(function(x){ return x.type==='hour'; }).value;
   }
   function todayYmd(){ return ymdInTZ(now); }
-  function nextWeekday(ymd){
-    let x=ymd;
-    for(let i=0;i<5;i++){
-      if(isWeekday(x)&&!CLOSED.has(x)) return x;
-      x=addDays(x,1);
-    }
-    return x;
-  }
-  function firstBookable(){
-    const y=todayYmd();
-    if(hourInTZ(now)>=16) return nextWeekday(addDays(y,1));
-    if(isWeekday(y)&&!CLOSED.has(y)) return y;
-    return nextWeekday(addDays(y,1));
-  }
   function parseYmd(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
-  function addDays(ymd,n){ const d=parseYmd(ymd); d.setDate(d.getDate()+n); const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
-  function weekday(ymd){ return parseYmd(ymd).getDay(); } // 0 Sun
+  function iso(y,m,d){ return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+  function addDays(ymd,n){
+    const d=parseYmd(ymd);
+    d.setDate(d.getDate()+n);
+    return iso(d.getFullYear(), d.getMonth()+1, d.getDate());
+  }
+  function weekday(ymd){ return parseYmd(ymd).getDay(); }
   function isWeekday(ymd){ const w=weekday(ymd); return w>=1 && w<=5; }
   function daysOut(ymd){
     const t=parseYmd(todayYmd()), d=parseYmd(ymd);
     return Math.round((d-t)/86400000);
   }
-  function isPast(ymd){
-    return ymd < firstBookable();
-  }
-  function lastBookable(){
-    return addDays(firstBookable(), 56);
-  }
-  function isBeyond(ymd){
-    return ymd > lastBookable();
-  }
-  function hash(s){
-    let h=2166136261;
-    for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); }
-    return (h>>>0)/4294967296;
+  function firstOpenYmd(){
+    let y=todayYmd();
+    if(hourInTZ(now)>=16) y=addDays(y,1);
+    return y<RANGE_START ? RANGE_START : y;
   }
   function leadMult(days){
     if(days<0) return null;
-    for(const [min,m] of LEAD){ if(days>=min) return m; }
+    for(let i=0;i<LEAD.length;i++){ if(days>=LEAD[i][0]) return LEAD[i][1]; }
     return 2;
   }
   function weekStart(ymd){
     const w=weekday(ymd);
-    const back = w===0?6:w-1;
-    return addDays(ymd,-back);
+    return addDays(ymd, w===0 ? -6 : 1-w);
   }
-  function demandLevel(ymd){
-    // Deterministic weekly demand, slightly hotter as we get closer.
-    const w=weekStart(ymd);
-    const r=hash('demand-'+w);
-    const close = daysOut(ymd)<10;
-    if(r<0.22) return close?1:0;
-    if(r<0.62) return close?2:1;
-    if(r<0.86) return close?3:2;
+  function cleanBlocks(list){
+    if(!Array.isArray(list)) return [];
+    const out=[];
+    for(let i=0;i<list.length;i++){
+      const r=list[i];
+      if(!r || !HM.test(r.start) || !HM.test(r.end)) continue;
+      out.push({start:r.start, end:r.end});
+    }
+    return out;
+  }
+  function dayInfo(ymd){
+    const rec=BY_DAY[ymd];
+    if(!rec) return null;
+    if(rec.w) return {kind:'weekend', s:0, held:0, blocks:[]};
+    if(rec.h) return {kind:'holiday', name:String(rec.h), s:0, held:0, blocks:[]};
+    const s=rec.s;
+    return {kind:'day', s:s, held:4-s, blocks:cleanBlocks(rec.b)};
+  }
+  function weekFill(ymd){
+    const start=weekStart(ymd);
+    let held=0, cap=0;
+    for(let i=0;i<5;i++){
+      const info=dayInfo(addDays(start,i));
+      if(!info || info.kind!=='day') continue;
+      cap+=4;
+      held+=info.held;
+    }
+    return cap ? held/cap : 0;
+  }
+  function demandIndex(ymd){
+    // Demand is this week's real fill, not a simulation.
+    // fill = held hours / capacity. Capacity is 4 hours for each weekday
+    // that is not a holiday. Weekends are excluded from the week.
+    //   fill < 0.25 → Quiet  (mostly open)
+    //   fill < 0.50 → Normal
+    //   fill < 0.75 → Busy
+    //   fill >= 0.75 → Hot   (most of the week's hours are already held)
+    const fill=weekFill(ymd);
+    if(fill<0.25) return 0;
+    if(fill<0.50) return 1;
+    if(fill<0.75) return 2;
     return 3;
-  }
-  function heldSlots(ymd){
-    // Closer days are more filled. Returns array of hour numbers already held,
-    // capped so a day is never oversold, and some near-term last seats remain.
-    if(CLOSED.has(ymd) || !isWeekday(ymd) || isPast(ymd) || daysOut(ymd)<0) return [];
-    const days=daysOut(ymd);
-    const r=hash('held-'+ymd);
-    let n=0;
-    if(days<=2) n = r<0.15?4:r<0.45?3:r<0.8?2:1;
-    else if(days<=6) n = r<0.12?3:r<0.45?2:r<0.8?1:0;
-    else if(days<=13) n = r<0.08?2:r<0.4?1:0;
-    else if(days<=27) n = r<0.18?1:0;
-    else n = r<0.08?1:0;
-    // pick which of the 7 hours are held, stable per date
-    const order=SLOTS.slice().sort((a,b)=>hash('slot-'+ymd+'-'+a)-hash('slot-'+ymd+'-'+b));
-    return order.slice(0,n).sort((a,b)=>a-b);
   }
   function round25(n){ return Math.round(n/25)*25; }
   function fareFor(base, ymd, heldCount){
     const days=daysOut(ymd);
     const lm=leadMult(days);
-    if(lm==null || heldCount>=4) return null;
-    const raw=base*lm*LOAD[heldCount]*DEMAND[demandLevel(ymd)];
+    if(lm==null || heldCount>=4 || heldCount<0) return null;
+    const raw=base*lm*LOAD[heldCount]*DEMAND[demandIndex(ymd)];
     const floor=round25(base*0.45);
     const ceil=round25(base*3);
     return Math.min(ceil, Math.max(floor, round25(raw)));
@@ -325,44 +1450,33 @@ Base fares (Reid defaults)
   function fmtShort(ymd){
     return parseYmd(ymd).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   }
-  function hourLabel(h){
-    const am=h<12, hr=h%12||12;
-    return hr+':00 '+(am?'AM':'PM');
+  function fmtClock(hm){
+    const parts=hm.split(':');
+    const H=+parts[0], M=+parts[1];
+    const h=H%12||12;
+    return h+':'+String(M).padStart(2,'0')+' '+(H<12?'AM':'PM');
   }
-
-  // For a given offer, lowest available fare that day, and whether bookable.
-  function dayQuote(offer, ymd){
-    if(CLOSED.has(ymd)) return {status:'closed', label:'Closed'};
-    if(!isWeekday(ymd) || isPast(ymd) || isBeyond(ymd) || daysOut(ymd)<0) return {status:'closed', label:''};
-    const held=heldSlots(ymd);
-    const free=SLOTS.filter(h=>!held.includes(h));
-    const remaining=4-held.length;
-    if(remaining<=0) return {status:'sold', label:'Full'};
-    if(offer.hours>remaining) return {status:'sold', label:'Full'};
-    // Team needs 2 consecutive free hours; Ramp needs the whole remaining day (only if 0 held, 4 hours).
-    if(offer.hours===2){
-      const starts=[];
-      for(let i=0;i<SLOTS.length-1;i++){
-        const a=SLOTS[i], b=SLOTS[i+1];
-        if(free.includes(a)&&free.includes(b)) starts.push(a);
-      }
-      if(!starts.length) return {status:'sold', label:'Full'};
-      const price=fareFor(offer.base,ymd,held.length);
-      return {status:'open', price, remaining, starts, held, free};
-    }
-    if(offer.hours===4){
-      if(held.length>0) return {status:'sold', label:'Full'};
-      const price=fareFor(offer.base,ymd,0);
-      return {status:'open', price, remaining:4, starts:[9], held, free};
-    }
-    const price=fareFor(offer.base,ymd,held.length);
-    return {status:'open', price, remaining, starts:free, held, free};
+  function leadPhrase(ymd){
+    const n=daysOut(ymd);
+    if(n<=0) return 'Today';
+    if(n===1) return '1 day out';
+    return n+' days out';
+  }
+  function dayQuote(off, ymd){
+    if(ymd<RANGE_START || ymd>RANGE_END || !isWeekday(ymd)) return {status:'closed', label:''};
+    const info=dayInfo(ymd);
+    if(!info || info.kind==='weekend') return {status:'closed', label:''};
+    if(info.kind==='holiday') return {status:'closed', label:'Closed', name:info.name};
+    if(ymd<firstOpenYmd()) return {status:'past', label:'Past'};
+    if(info.s<=0) return {status:'sold', label:'Full', s:0, held:4, blocks:info.blocks};
+    // A longer offering is unavailable when the day does not have enough hours left for sale.
+    if(off.hours>info.s) return {status:'short', s:info.s, held:info.held, blocks:info.blocks};
+    const price=fareFor(off.base, ymd, info.held);
+    return {status:'open', price:price, s:info.s, held:info.held, blocks:info.blocks};
   }
 
   let offer=OFFERS[0];
-  let view=parseYmd(firstBookable());
   let selectedDate=null;
-  let selectedStart=null;
   let selectedPrice=null;
 
   const menuEl=document.getElementById('menu');
@@ -378,59 +1492,37 @@ Base fares (Reid defaults)
   const dockSub=document.getElementById('dockSub');
   const cta=document.getElementById('cta');
   const toast=document.getElementById('toast');
-  const confirm=document.getElementById('confirm');
+  const confirmEl=document.getElementById('confirm');
+  const liveEx=document.getElementById('liveEx');
 
-  const firstMonth=new Date(parseYmd(firstBookable()).getFullYear(), parseYmd(firstBookable()).getMonth(), 1);
-  const lastDay=addDays(firstBookable(), 56);
-  const lastMonth=new Date(parseYmd(lastDay).getFullYear(), parseYmd(lastDay).getMonth(), 1);
-
-  function renderMenu(){
-    menuEl.innerHTML='';
-    OFFERS.forEach(o=>{
-      const b=document.createElement('button');
-      b.className='chip'+(o.id===offer.id?' on':'');
-      b.setAttribute('role','option');
-      b.setAttribute('aria-selected', o.id===offer.id);
-      b.innerHTML='<b>'+o.name+'</b><em>'+o.blurb+'</em>';
-      b.onclick=()=>{ offer=o; selectedStart=null; selectedPrice=null; render(); };
-      menuEl.appendChild(b);
-    });
+  const firstMonth=new Date(2026,10,1);
+  const lastMonth=new Date(2027,2,1);
+  function ym(d){ return d.getFullYear()*12+d.getMonth(); }
+  function initialMonth(){
+    const ymd=firstOpenYmd();
+    const shown=ymd>RANGE_END ? RANGE_END : ymd;
+    const d=parseYmd(shown);
+    return new Date(d.getFullYear(), d.getMonth(), 1);
   }
+  let view=initialMonth();
 
-  function monthDays(date){
-    const y=date.getFullYear(), m=date.getMonth();
-    const first=new Date(y,m,1);
-    // Monday-start offset
-    let start=first.getDay(); // 0 sun
-    start = start===0?6:start-1;
-    const daysIn=new Date(y,m+1,0).getDate();
-    // We only show weekdays, so walk every day and skip weekends, keeping empty weekday pads at start.
-    const cells=[];
-    // pad Monday-Friday of first week
-    for(let i=0;i<start;i++){
-      if(i<5) cells.push(null); // weekend pads that fall before Monday... start is Mon-index
-    }
-    // If month starts Sat (start=5) or Sun (start=6):
-    // Sat: 5 pads would be Mon-Fri empty — wrong. Sat start means first weekday is Monday the 3rd, 0 pads of weekdays.
-    // Sun: first weekday is Monday the 2nd, 0 pads.
-    // Recalculate pads as weekday pads only:
-    cells.length=0;
-    const weekdayPad = start>=5 ? 0 : start;
-    for(let i=0;i<weekdayPad;i++) cells.push(null);
-    const minYmd=weekStart(firstBookable());
-    for(let d=1;d<=daysIn;d++){
-      const dt=new Date(y,m,d);
-      const w=dt.getDay();
-      if(w===0||w===6) continue;
-      const mm=String(m+1).padStart(2,'0');
-      const dd=String(d).padStart(2,'0');
-      const ymd=y+'-'+mm+'-'+dd;
-      if(ymd<minYmd || ymd>lastBookable()) continue;
-      cells.push(ymd);
-    }
-    return cells;
+  function el(tag, cls, text){
+    const n=document.createElement(tag);
+    if(cls) n.className=cls;
+    if(text!=null) n.textContent=text;
+    return n;
   }
-
+  function priceSpan(){
+    const prices=[];
+    let scan=RANGE_START;
+    while(scan<=RANGE_END){
+      const q=dayQuote(offer, scan);
+      if(q.status==='open') prices.push(q.price);
+      scan=addDays(scan,1);
+    }
+    if(!prices.length) return {lo:0, hi:1};
+    return {lo:Math.min.apply(null, prices), hi:Math.max.apply(null, prices)};
+  }
   function fareColor(price, lo, hi){
     if(hi<=lo) return 'low';
     const t=(price-lo)/(hi-lo);
@@ -438,48 +1530,106 @@ Base fares (Reid defaults)
     if(t<.67) return 'mid';
     return 'high';
   }
+  function monthCells(date){
+    const y=date.getFullYear(), m=date.getMonth();
+    const daysIn=new Date(y, m+1, 0).getDate();
+    const shown=[];
+    for(let d=1; d<=daysIn; d++){
+      const dt=new Date(y, m, d);
+      const w=dt.getDay();
+      if(w===0 || w===6) continue;
+      const ymd=iso(y, m+1, d);
+      if(ymd<RANGE_START || ymd>RANGE_END) continue;
+      shown.push(ymd);
+    }
+    if(!shown.length) return [];
+    const firstDow=parseYmd(shown[0]).getDay();
+    const cells=[];
+    for(let i=1;i<firstDow;i++) cells.push(null);
+    return cells.concat(shown);
+  }
+  function placementLine(){
+    const unit=offer.hours===1 ? '1 hour' : offer.hours+' hours';
+    return unit+', placed between 9 AM and 4 PM';
+  }
+
+  function renderMenu(){
+    menuEl.replaceChildren();
+    OFFERS.forEach(function(o){
+      const b=el('button', 'chip'+(o.id===offer.id?' on':''));
+      b.type='button';
+      b.setAttribute('role','option');
+      b.setAttribute('aria-selected', o.id===offer.id ? 'true' : 'false');
+      b.dataset.offer=o.id;
+      b.append(el('b', null, o.name), el('em', null, o.blurb));
+      b.onclick=function(){
+        offer=o;
+        confirmEl.classList.remove('on');
+        if(selectedDate){
+          const q=dayQuote(offer, selectedDate);
+          if(q.status==='open') selectedPrice=q.price;
+          else if(q.status==='short') selectedPrice=null;
+          else { selectedDate=null; selectedPrice=null; }
+        }
+        render();
+      };
+      menuEl.appendChild(b);
+    });
+  }
 
   function renderGrid(){
-    const y=view.getFullYear(), m=view.getMonth();
-    monthLabel.textContent=view.toLocaleDateString('en-US',{month:'long',year:'numeric'});
-    prev.disabled = view<=firstMonth;
-    next.disabled = view>=lastMonth;
-    const cells=monthDays(view);
-    // Color scale across the full bookable window, so "green" means cheap in absolute terms.
-    const prices=[];
-    let scan=firstBookable();
-    const end=addDays(firstBookable(), 56);
-    while(scan<=end){
-      const q=dayQuote(offer,scan);
-      if(q.status==='open') prices.push(q.price);
-      scan=addDays(scan,1);
-    }
-    const lo=Math.min(...prices);
-    const hi=Math.max(...prices);
-    gridEl.innerHTML='';
-    cells.forEach(ymd=>{
-      const b=document.createElement('button');
-      if(!ymd){ b.className='cell empty'; b.disabled=true; b.setAttribute('aria-hidden','true'); gridEl.appendChild(b); return; }
-      const q=dayQuote(offer,ymd);
-      const d=parseYmd(ymd).getDate();
-      if(q.status==='closed'){
-        b.className='cell closed';
-        const pl = CLOSED.has(ymd)?'Closed':(isPast(ymd)?'':'');
-        b.innerHTML='<span class="d">'+d+'</span><span class="p">'+pl+'</span>';
+    monthLabel.textContent=view.toLocaleDateString('en-US',{month:'long', year:'numeric'});
+    gridEl.setAttribute('aria-label', monthLabel.textContent);
+    prev.disabled=ym(view)<=ym(firstMonth);
+    next.disabled=ym(view)>=ym(lastMonth);
+    const span=priceSpan();
+    const cells=monthCells(view);
+    gridEl.replaceChildren();
+    cells.forEach(function(ymd){
+      const b=el('button', 'cell');
+      b.type='button';
+      if(!ymd){
+        b.className='cell empty';
         b.disabled=true;
+        b.tabIndex=-1;
+        b.setAttribute('aria-hidden','true');
+        gridEl.appendChild(b);
+        return;
+      }
+      const q=dayQuote(offer, ymd);
+      const num=el('span', 'd', String(parseYmd(ymd).getDate()));
+      const p=el('span', 'p');
+      b.dataset.date=ymd;
+      b.dataset.status=q.status;
+      if(q.status==='open'){
+        b.className='cell '+fareColor(q.price, span.lo, span.hi)+(selectedDate===ymd?' on':'');
+        p.textContent=money(q.price);
+        b.setAttribute('aria-label', fmtDate(ymd)+', '+money(q.price)+', '+q.s+' of 4 hours open');
+        b.onclick=function(){ selectDay(ymd, true); };
+      } else if(q.status==='short'){
+        b.className='cell na'+(selectedDate===ymd?' on':'');
+        p.textContent=q.s+' open';
+        b.setAttribute('aria-label', fmtDate(ymd)+', only '+q.s+' hours open, not enough for '+offer.name);
+        b.onclick=function(){ selectDay(ymd, true); };
+      } else if(q.status==='past'){
+        b.className='cell past';
+        b.disabled=true;
+        p.textContent='Past';
+        b.setAttribute('aria-label', fmtDate(ymd)+', past');
       } else if(q.status==='sold'){
         b.className='cell closed';
-        b.innerHTML='<span class="d">'+d+'</span><span class="p">Full</span>';
         b.disabled=true;
+        p.textContent='Full';
+        b.setAttribute('aria-label', fmtDate(ymd)+', full');
       } else {
-        const col=fareColor(q.price,lo,hi);
-        b.className='cell '+col+(selectedDate===ymd?' on':'');
-        b.innerHTML='<span class="d">'+d+'</span><span class="p">'+money(q.price)+'</span>';
-        b.setAttribute('aria-label', fmtDate(ymd)+', from '+money(q.price));
-        b.onclick=()=>{ selectedDate=ymd; selectedStart=null; selectedPrice=null; confirm.classList.remove('on'); render();
-          document.getElementById('dayPanel').scrollIntoView({behavior:'smooth',block:'start'});
-        };
+        b.className='cell closed';
+        b.disabled=true;
+        p.textContent=q.label || '';
+        const holiday=q.name ? ', '+q.name : '';
+        b.setAttribute('aria-label', fmtDate(ymd)+(q.label==='Closed' ? ', closed'+holiday : ''));
+        if(q.name) b.title=q.name;
       }
+      b.append(num, p);
       gridEl.appendChild(b);
     });
   }
@@ -487,79 +1637,48 @@ Base fares (Reid defaults)
   function renderDay(){
     if(!selectedDate){ dayPanel.hidden=true; return; }
     const q=dayQuote(offer, selectedDate);
-    if(q.status!=='open'){ dayPanel.hidden=true; return; }
+    if(q.status!=='open' && q.status!=='short'){ dayPanel.hidden=true; return; }
     dayPanel.hidden=false;
     dayTitle.textContent=fmtDate(selectedDate);
-    const dem=DEMAND_NAME[demandLevel(selectedDate)];
-    const heldN=heldSlots(selectedDate).length;
-    const left=4-heldN;
-    if(offer.hours===4){
-      dayMeta.textContent='AI Ramp Day takes this day’s four hours. '+dem+' week. '+daysOut(selectedDate)+' day'+(daysOut(selectedDate)===1?'':'s')+' out.';
+    const dem=DEMAND_NAME[demandIndex(selectedDate)];
+    if(q.status==='short'){
+      dayMeta.textContent=offer.name+' needs '+offer.hours+' open hours. This day has '+q.s+' of 4. '+dem+' week.';
     } else {
-      dayMeta.textContent=left+' of 4 hours open. '+dem+' week. '+daysOut(selectedDate)+' day'+(daysOut(selectedDate)===1?'':'s')+' out.';
+      let meta=q.s+' of 4 hours open. '+dem+' week. '+leadPhrase(selectedDate)+'.';
+      if(q.held===0 && q.blocks.length) meta+=' Blocked time below still leaves four billable hours.';
+      dayMeta.textContent=meta;
     }
-    slotsEl.innerHTML='';
-    if(offer.hours===4){
-      const b=document.createElement('button');
-      const on=selectedStart===9;
-      b.className='slot'+(on?' on':'');
-      b.innerHTML='<span class="t">Full day, 9 AM – 4 PM</span><span class="pr">'+money(q.price)+'</span>';
-      b.onclick=()=>{ selectedStart=9; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
-        document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
+    slotsEl.replaceChildren();
+    if(q.status==='open'){
+      const b=el('button', 'slot on');
+      b.type='button';
+      const t=el('span', 't', offer.name);
+      t.appendChild(el('span', 'sub', placementLine()));
+      b.append(t, el('span', 'pr', money(q.price)));
+      b.setAttribute('aria-pressed','true');
       slotsEl.appendChild(b);
-      return;
     }
-    if(offer.hours===2){
-      q.starts.forEach(h=>{
-        const b=document.createElement('button');
-        const on=selectedStart===h;
-        b.className='slot'+(on?' on':'');
-        b.innerHTML='<span class="t">'+hourLabel(h)+' – '+hourLabel(h+2)+'</span><span class="pr">'+money(q.price)+'</span>';
-        b.onclick=()=>{ selectedStart=h; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
-          document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
-        slotsEl.appendChild(b);
-      });
-      // show held hours as context
-      heldSlots(selectedDate).forEach(h=>{
-        const b=document.createElement('button');
-        b.className='slot held'; b.disabled=true;
-        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">Held</span>';
-        slotsEl.appendChild(b);
-      });
-      return;
-    }
-    SLOTS.forEach(h=>{
-      const b=document.createElement('button');
-      if(q.held.includes(h)){
-        b.className='slot held'; b.disabled=true;
-        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">Held</span>';
-      } else {
-        const on=selectedStart===h;
-        b.className='slot'+(on?' on':'');
-        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">'+money(q.price)+'</span>';
-        b.onclick=()=>{ selectedStart=h; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
-          document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
-      }
+    q.blocks.forEach(function(range){
+      const b=el('button', 'slot held');
+      b.type='button';
+      b.disabled=true;
+      b.append(
+        el('span', 't', fmtClock(range.start)+' – '+fmtClock(range.end)),
+        el('span', 'pr', 'Blocked')
+      );
       slotsEl.appendChild(b);
     });
   }
 
-  function whenText(){
-    if(!selectedDate || selectedStart==null) return '';
-    if(offer.hours===4) return fmtShort(selectedDate)+', 9 AM – 4 PM PT';
-    if(offer.hours===2) return fmtShort(selectedDate)+', '+hourLabel(selectedStart)+'–'+hourLabel(selectedStart+2)+' PT';
-    return fmtShort(selectedDate)+', '+hourLabel(selectedStart)+' PT';
-  }
-
   function renderDock(){
-    if(selectedStart!=null && selectedPrice!=null){
+    const q=selectedDate ? dayQuote(offer, selectedDate) : null;
+    if(q && q.status==='open' && selectedPrice!=null){
       dockPrice.textContent=money(selectedPrice);
-      dockSub.textContent=offer.name+' · '+whenText();
+      dockSub.textContent=offer.name+' · '+fmtShort(selectedDate);
       cta.disabled=false;
-    } else if(selectedDate){
-      const q=dayQuote(offer,selectedDate);
-      dockPrice.textContent=q.price?money(q.price):'Pick a time';
-      dockSub.textContent=offer.name+' · '+fmtShort(selectedDate)+' · pick a time';
+    } else if(q && q.status==='short'){
+      dockPrice.textContent='Not enough hours';
+      dockSub.textContent=offer.name+' needs '+offer.hours+' · '+q.s+' open '+fmtShort(selectedDate);
       cta.disabled=true;
     } else {
       dockPrice.textContent='Choose a date';
@@ -568,25 +1687,61 @@ Base fares (Reid defaults)
     }
   }
 
+  function renderExample(){
+    const samples=['2026-11-17','2026-12-15','2027-03-05'];
+    const bits=samples.map(function(ymd){
+      const q=dayQuote(OFFERS[0], ymd);
+      const when=fmtDate(ymd);
+      if(q.status==='open') return money(q.price)+' on '+when+' ('+q.s+' of 4 hours open)';
+      if(q.status==='past') return when+' has passed';
+      if(q.status==='short') return when+' does not have enough open hours';
+      if(q.status==='closed') return when+' is closed';
+      return when+' is full';
+    });
+    liveEx.textContent='On this page right now, a working session is '+bits[0]+', '+bits[1]+', and '+bits[2]+'. Lead time is counted from today’s date, in Pacific time.';
+  }
+
   function render(){
     renderMenu();
     renderGrid();
     renderDay();
     renderDock();
+    renderExample();
   }
 
-  prev.onclick=()=>{ if(view>firstMonth){ view=new Date(view.getFullYear(), view.getMonth()-1, 1); render(); } };
-  next.onclick=()=>{ if(view<lastMonth){ view=new Date(view.getFullYear(), view.getMonth()+1, 1); render(); } };
+  function selectDay(ymd, scroll){
+    selectedDate=ymd;
+    const q=dayQuote(offer, ymd);
+    selectedPrice=q.status==='open' ? q.price : null;
+    confirmEl.classList.remove('on');
+    render();
+    if(scroll && !dayPanel.hidden){
+      dayPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
 
-  cta.onclick=()=>{
-    if(cta.disabled) return;
+  prev.onclick=function(){
+    if(ym(view)<=ym(firstMonth)) return;
+    view=new Date(view.getFullYear(), view.getMonth()-1, 1);
+    render();
+  };
+  next.onclick=function(){
+    if(ym(view)>=ym(lastMonth)) return;
+    view=new Date(view.getFullYear(), view.getMonth()+1, 1);
+    render();
+  };
+
+  cta.onclick=function(){
+    if(cta.disabled || selectedPrice==null || !selectedDate) return;
     document.getElementById('cOff').textContent=offer.name;
-    document.getElementById('cWhen').textContent=whenText();
+    const whenEl=document.getElementById('cWhen');
+    const unit=offer.hours===1 ? '1 hour' : offer.hours+' hours';
+    whenEl.replaceChildren(fmtShort(selectedDate), document.createElement('br'), unit+', 9 AM–4 PM PT');
     document.getElementById('cFare').textContent=money(selectedPrice);
-    confirm.classList.add('on');
-    confirm.scrollIntoView({behavior:'smooth',block:'center'});
+    confirmEl.classList.add('on');
+    confirmEl.scrollIntoView({behavior:'smooth', block:'center'});
     toast.classList.add('on');
-    setTimeout(()=>toast.classList.remove('on'), 3200);
+    setTimeout(function(){ toast.classList.remove('on'); }, 3200);
   };
 
   render();
