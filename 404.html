@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F3EEE3">
+<title>Kendall’s Calendar | Frontier School</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EEE3;--fg:#1B1B1B;--muted:#5E5A52;--line:#DCD6C8;--card:#FBF9F4;
+  --accent:#D8734F;--mari:#F2B84B;--lake:#4F7CAC;--mint:#CFE3D6;
+  --head:'Newsreader',Georgia,serif;--body:Inter,system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --low:#2F6F4E;--mid:#8A5A14;--high:#B5482A;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+body{padding-bottom:calc(168px + var(--safe-b))}
+button,select{font:inherit;color:inherit}
+.wrap{max-width:430px;margin:0 auto;padding:0 18px}
+.draft{display:flex;justify-content:center;padding:10px 18px 0}
+.draft span{pointer-events:none;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1.5px solid var(--accent);background:var(--card);padding:6px 9px;border-radius:6px}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:56px;border-bottom:1.5px solid var(--fg);padding-top:8px;margin-bottom:8px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--head);font-size:19px;font-weight:500}
+.mark{width:22px;height:22px;border-radius:50%;background:var(--accent);position:relative;flex-shrink:0}
+.mark:after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--bg)}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
+h1{font-family:var(--head);font-weight:500;letter-spacing:-.02em;font-size:34px;line-height:1.08;margin:0 0 14px;max-width:14ch}
+.lede{color:var(--muted);font-size:16.5px;line-height:1.5;margin:0 0 8px}
+.menu-wrap{position:relative;margin:0 -18px}.menu-wrap:after{content:'';position:absolute;top:18px;right:0;bottom:8px;width:28px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none}.menu{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:18px 18px 8px}
+.menu::-webkit-scrollbar{display:none}
+.chip{scroll-snap-align:start;flex:0 0 auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px 13px;min-width:154px;text-align:left;cursor:pointer}
+.chip b{display:block;font-size:15px;font-weight:600;margin-bottom:2px}
+.chip em{display:block;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.chip.on{border-color:var(--fg);background:#fff;box-shadow:0 0 0 1.5px var(--fg)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px}
+.cal-head h2{font-family:var(--head);font-weight:500;font-size:24px;margin:0}
+.nav{display:flex;gap:6px}
+.nav button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--fg);background:transparent;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.nav button:disabled{opacity:.28;cursor:default}
+.dow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:6px}
+.dow span{text-align:center;font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:4px 0}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.cell{appearance:none;background:var(--card);border:1.5px solid var(--line);border-radius:12px;min-height:72px;padding:8px 4px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cell .d{font-weight:600;font-size:16px;line-height:1}
+.cell .p{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:-.02em}
+.cell.low .p{color:var(--low)}
+.cell.mid .p{color:var(--mid)}
+.cell.high .p{color:var(--high)}
+.cell.closed,.cell.empty{background:transparent;border-color:transparent;cursor:default;min-height:72px}
+.cell.closed{background:var(--bg);border:1.5px dashed var(--line);cursor:default}
+.cell.closed .p{color:var(--muted);font-size:9px;letter-spacing:.04em;text-transform:uppercase}
+.cell.closed .d{color:var(--muted)}
+.cell.on{background:var(--fg);border-color:var(--fg);color:#FBF9F4}
+.cell.on .p{color:#F2B84B}
+.cell:not(.closed):not(.empty):not(.on):active{transform:scale(.97)}
+.legend{display:flex;gap:14px;justify-content:center;margin:14px 0 4px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.legend .l{background:var(--low)}
+.legend .m{background:var(--mid)}
+.legend .h{background:var(--high)}
+.day{margin-top:28px;padding-top:22px;border-top:1.5px solid var(--fg);scroll-margin-top:16px}
+.day h3{font-family:var(--head);font-weight:500;font-size:26px;margin:0 0 4px}
+.meta{color:var(--muted);font-size:14px;margin:0 0 16px}
+.slots{display:flex;flex-direction:column;gap:8px}
+.slot{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;width:100%;text-align:left;min-height:58px}
+.slot .t{font-weight:600;font-size:16px;flex:1}
+.slot .pr{font-family:var(--mono);font-size:15px;font-weight:500}
+.slot.on{border-color:var(--fg);box-shadow:0 0 0 1.5px var(--fg);background:#fff}
+.slot.held{cursor:default;opacity:.55}
+.slot.held .pr{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.how{margin:36px 0 20px;border-top:1.5px solid var(--fg);padding-top:28px}
+.how h2{font-family:var(--head);font-weight:500;font-size:28px;margin:0 0 12px;max-width:16ch}
+.how p{margin:0 0 14px;color:var(--fg);font-size:16px}
+.how ol{margin:0;padding:0 0 0 1.15em}
+.how li{margin:0 0 10px;padding:0;font-size:16px}
+.how li strong{display:block;font-size:16px}
+.how li span{color:var(--muted);font-size:15px}
+details{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:18px}
+summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";font-family:var(--mono);font-weight:500;color:var(--muted)}
+details[open] summary:after{content:"–"}
+.formula{font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--fg);margin:12px 0 0;overflow-x:auto;white-space:pre-wrap}
+.ex{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.55}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1.5px solid var(--fg);padding:12px 18px calc(12px + var(--safe-b))}
+.dock-inner{max-width:430px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.dock .sum{flex:1;min-width:0}
+.dock .sum b{display:block;font-family:var(--head);font-weight:500;font-size:22px;line-height:1.1}
+.dock .sum s{display:block;font-size:12px;color:var(--muted);text-decoration:none;margin-top:2px;line-height:1.3}
+.cta{appearance:none;border:0;background:var(--accent);color:#fff;font-weight:600;font-size:15px;border-radius:999px;padding:0 20px;min-height:48px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.cta:disabled{background:var(--line);color:var(--muted);cursor:default}
+.toast{display:none;position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%);background:var(--fg);color:#FBF9F4;font-size:14px;padding:12px 16px;border-radius:12px;z-index:50;width:calc(100% - 36px);max-width:394px;text-align:center;line-height:1.4}
+.toast.on{display:block}
+.confirm{display:none;padding:22px 0 8px}
+.confirm.on{display:block}
+.confirm .card{background:var(--card);border:1.5px solid var(--fg);border-radius:16px;padding:20px}
+.confirm h3{font-family:var(--head);font-weight:500;font-size:24px;margin:0 0 12px}
+.confirm dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px}
+.confirm dt{color:var(--muted)}
+.confirm dd{margin:0;font-weight:600;text-align:right}
+.note{font-size:13px;color:var(--muted);margin:18px 0 0}
+</style>
+</head>
+<body>
+<div class="draft"><span>Draft for review</span></div>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><span class="mark"></span>Frontier School</div>
+  </div>
+
+  <p class="eyebrow">Kendall’s calendar</p>
+  <h1>Book time the way you’d book a flight.</h1>
+  <p class="lede">Four hours a day, Monday through Friday, 9&nbsp;AM to 4&nbsp;PM Pacific. Pick what you need from the menu, then pick a date. Fares are cheaper further out, and higher when a day is filling up or the date is close.</p>
+
+  <p class="eyebrow" style="margin-bottom:0">The menu</p>
+  <div class="menu-wrap"><div class="menu" id="menu" role="listbox" aria-label="Offerings"></div></div>
+
+  <div class="cal-head">
+    <h2 id="monthLabel"></h2>
+    <div class="nav">
+      <button type="button" id="prev" aria-label="Previous month">‹</button>
+      <button type="button" id="next" aria-label="Next month">›</button>
+    </div>
+  </div>
+  <div class="dow" aria-hidden="true">
+    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="legend"><span><i class="l"></i>Lower</span><span><i class="m"></i>Typical</span><span><i class="h"></i>Higher</span></div>
+
+  <div class="day" id="dayPanel" hidden>
+    <h3 id="dayTitle"></h3>
+    <p class="meta" id="dayMeta"></p>
+    <div class="slots" id="slots"></div>
+  </div>
+
+  <div class="confirm" id="confirm">
+    <div class="card">
+      <h3>Request this seat</h3>
+      <dl>
+        <dt>Offering</dt><dd id="cOff"></dd>
+        <dt>When</dt><dd id="cWhen"></dd>
+        <dt>Fare</dt><dd id="cFare"></dd>
+      </dl>
+      <p class="note">This is a draft. Nothing is charged, and the request stays on this page. In the live version, this would go to Kendall’s team to confirm the seat.</p>
+    </div>
+  </div>
+
+  <section class="how">
+    <h2>How the fares work</h2>
+    <p>The rare thing being sold is Kendall’s calendar, not a new product for every request. Each offering on the menu takes a set number of hours. The fare for those hours moves the same way an airline fare does, from three numbers:</p>
+    <ol>
+      <li><strong>How far out you book.</strong> <span>Six weeks ahead is the cheapest. Inside a week, it climbs. Same-day is the walk-up fare, or the seat may already be gone.</span></li>
+      <li><strong>How full that day is.</strong> <span>Each weekday has four hours for sale. The last open hour on a day carries a last-seat premium.</span></li>
+      <li><strong>How much demand that week is seeing.</strong> <span>A quiet week stays closer to the advance fare. A week that’s filling fast moves up, even if you book it early.</span></li>
+    </ol>
+    <details>
+      <summary>The algorithm, in full</summary>
+      <div class="formula">fare = round_to_$25( base × lead × load × demand )
+floor: 45% of base
+ceiling: 3× base
+
+Lead time (days out)
+  42+    0.55
+  28–41  0.65
+  14–27  0.80
+  7–13   1.00   ← base sits here
+  3–6    1.30
+  1–2    1.65
+  same   2.00
+
+Load (hours already held that day, of 4)
+  0/4    1.00
+  1/4    1.12
+  2/4    1.28
+  3/4    1.55   last-hour premium
+  4/4    sold out
+
+Demand (that week’s pace)
+  Quiet  0.90
+  Normal 1.00
+  Busy   1.20
+  Hot    1.40
+
+Base fares (Reid defaults)
+  Working session    $375  ·  1 hour
+  Alumni hour        $250  ·  1 hour  (Intensive graduates)
+  Team session       $750  ·  2 hours
+  AI Ramp Day      $1,500  ·  4 hours (full day’s capacity)</div>
+      <p class="ex">Example: a working session, base $375. Six weeks out, on a quiet empty day: $375 × 0.55 × 1.00 × 0.90 = $186, rounds to $175. Two days out, last hour on a busy day: $375 × 1.65 × 1.55 × 1.20 = $1,151, capped at 3× to $1,125.</p>
+      <p class="ex">The calendar in this draft is a live demo of that formula. Held seats and weekly demand are simulated so you can see the range. In production, held seats would be real bookings, and demand would be the actual pace of inquiries against remaining hours that week. Closed days in this draft: Thanksgiving (Nov 26–27), Christmas (Dec 24–25), New Year’s Day (Jan 1).</p>
+    </details>
+  </section>
+</div>
+
+<div class="dock">
+  <div class="dock-inner">
+    <div class="sum">
+      <b id="dockPrice">Choose a date</b>
+      <s id="dockSub">Fares shown in Pacific time</s>
+    </div>
+    <button class="cta" id="cta" disabled>Request this seat</button>
+  </div>
+</div>
+<div class="toast" id="toast">Request noted on this draft. Nothing was sent or charged.</div>
+
+<script>
+(function(){
+  const TZ = 'America/Los_Angeles';
+  const OFFERS = [
+    {id:'work', name:'Working session', hours:1, base:375, blurb:'1 hour  ·  base $375'},
+    {id:'alumni', name:'Alumni hour', hours:1, base:250, blurb:'1 hour  ·  base $250'},
+    {id:'team', name:'Team session', hours:2, base:750, blurb:'2 hours  ·  base $750'},
+    {id:'ramp', name:'AI Ramp Day', hours:4, base:1500, blurb:'4 hours  ·  base $1,500'}
+  ];
+  const SLOTS = [9,10,11,12,13,14,15];
+  const CLOSED = new Set(['2026-11-26','2026-11-27','2026-12-24','2026-12-25','2027-01-01']);
+  const LEAD = [[42,.55],[28,.65],[14,.80],[7,1],[3,1.30],[1,1.65],[0,2]];
+  const LOAD = [1, 1.12, 1.28, 1.55];
+  const DEMAND = [0.90, 1.00, 1.20, 1.40];
+  const DEMAND_NAME = ['Quiet','Normal','Busy','Hot'];
+
+  const now = new Date();
+  function ymdInTZ(d){
+    return new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+  }
+  function hourInTZ(d){
+    const p=new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',hourCycle:'h23'}).formatToParts(d);
+    return +p.find(x=>x.type==='hour').value;
+  }
+  function todayYmd(){ return ymdInTZ(now); }
+  function nextWeekday(ymd){
+    let x=ymd;
+    for(let i=0;i<5;i++){
+      if(isWeekday(x)&&!CLOSED.has(x)) return x;
+      x=addDays(x,1);
+    }
+    return x;
+  }
+  function firstBookable(){
+    const y=todayYmd();
+    if(hourInTZ(now)>=16) return nextWeekday(addDays(y,1));
+    if(isWeekday(y)&&!CLOSED.has(y)) return y;
+    return nextWeekday(addDays(y,1));
+  }
+  function parseYmd(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+  function addDays(ymd,n){ const d=parseYmd(ymd); d.setDate(d.getDate()+n); const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
+  function weekday(ymd){ return parseYmd(ymd).getDay(); } // 0 Sun
+  function isWeekday(ymd){ const w=weekday(ymd); return w>=1 && w<=5; }
+  function daysOut(ymd){
+    const t=parseYmd(todayYmd()), d=parseYmd(ymd);
+    return Math.round((d-t)/86400000);
+  }
+  function isPast(ymd){
+    return ymd < firstBookable();
+  }
+  function lastBookable(){
+    return addDays(firstBookable(), 56);
+  }
+  function isBeyond(ymd){
+    return ymd > lastBookable();
+  }
+  function hash(s){
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); }
+    return (h>>>0)/4294967296;
+  }
+  function leadMult(days){
+    if(days<0) return null;
+    for(const [min,m] of LEAD){ if(days>=min) return m; }
+    return 2;
+  }
+  function weekStart(ymd){
+    const w=weekday(ymd);
+    const back = w===0?6:w-1;
+    return addDays(ymd,-back);
+  }
+  function demandLevel(ymd){
+    // Deterministic weekly demand, slightly hotter as we get closer.
+    const w=weekStart(ymd);
+    const r=hash('demand-'+w);
+    const close = daysOut(ymd)<10;
+    if(r<0.22) return close?1:0;
+    if(r<0.62) return close?2:1;
+    if(r<0.86) return close?3:2;
+    return 3;
+  }
+  function heldSlots(ymd){
+    // Closer days are more filled. Returns array of hour numbers already held,
+    // capped so a day is never oversold, and some near-term last seats remain.
+    if(CLOSED.has(ymd) || !isWeekday(ymd) || isPast(ymd) || daysOut(ymd)<0) return [];
+    const days=daysOut(ymd);
+    const r=hash('held-'+ymd);
+    let n=0;
+    if(days<=2) n = r<0.15?4:r<0.45?3:r<0.8?2:1;
+    else if(days<=6) n = r<0.12?3:r<0.45?2:r<0.8?1:0;
+    else if(days<=13) n = r<0.08?2:r<0.4?1:0;
+    else if(days<=27) n = r<0.18?1:0;
+    else n = r<0.08?1:0;
+    // pick which of the 7 hours are held, stable per date
+    const order=SLOTS.slice().sort((a,b)=>hash('slot-'+ymd+'-'+a)-hash('slot-'+ymd+'-'+b));
+    return order.slice(0,n).sort((a,b)=>a-b);
+  }
+  function round25(n){ return Math.round(n/25)*25; }
+  function fareFor(base, ymd, heldCount){
+    const days=daysOut(ymd);
+    const lm=leadMult(days);
+    if(lm==null || heldCount>=4) return null;
+    const raw=base*lm*LOAD[heldCount]*DEMAND[demandLevel(ymd)];
+    const floor=round25(base*0.45);
+    const ceil=round25(base*3);
+    return Math.min(ceil, Math.max(floor, round25(raw)));
+  }
+  function money(n){ return '$'+n.toLocaleString('en-US'); }
+  function fmtDate(ymd){
+    return parseYmd(ymd).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  }
+  function fmtShort(ymd){
+    return parseYmd(ymd).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  }
+  function hourLabel(h){
+    const am=h<12, hr=h%12||12;
+    return hr+':00 '+(am?'AM':'PM');
+  }
+
+  // For a given offer, lowest available fare that day, and whether bookable.
+  function dayQuote(offer, ymd){
+    if(CLOSED.has(ymd)) return {status:'closed', label:'Closed'};
+    if(!isWeekday(ymd) || isPast(ymd) || isBeyond(ymd) || daysOut(ymd)<0) return {status:'closed', label:''};
+    const held=heldSlots(ymd);
+    const free=SLOTS.filter(h=>!held.includes(h));
+    const remaining=4-held.length;
+    if(remaining<=0) return {status:'sold', label:'Full'};
+    if(offer.hours>remaining) return {status:'sold', label:'Full'};
+    // Team needs 2 consecutive free hours; Ramp needs the whole remaining day (only if 0 held, 4 hours).
+    if(offer.hours===2){
+      const starts=[];
+      for(let i=0;i<SLOTS.length-1;i++){
+        const a=SLOTS[i], b=SLOTS[i+1];
+        if(free.includes(a)&&free.includes(b)) starts.push(a);
+      }
+      if(!starts.length) return {status:'sold', label:'Full'};
+      const price=fareFor(offer.base,ymd,held.length);
+      return {status:'open', price, remaining, starts, held, free};
+    }
+    if(offer.hours===4){
+      if(held.length>0) return {status:'sold', label:'Full'};
+      const price=fareFor(offer.base,ymd,0);
+      return {status:'open', price, remaining:4, starts:[9], held, free};
+    }
+    const price=fareFor(offer.base,ymd,held.length);
+    return {status:'open', price, remaining, starts:free, held, free};
+  }
+
+  let offer=OFFERS[0];
+  let view=parseYmd(firstBookable());
+  let selectedDate=null;
+  let selectedStart=null;
+  let selectedPrice=null;
+
+  const menuEl=document.getElementById('menu');
+  const gridEl=document.getElementById('grid');
+  const monthLabel=document.getElementById('monthLabel');
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const dayPanel=document.getElementById('dayPanel');
+  const dayTitle=document.getElementById('dayTitle');
+  const dayMeta=document.getElementById('dayMeta');
+  const slotsEl=document.getElementById('slots');
+  const dockPrice=document.getElementById('dockPrice');
+  const dockSub=document.getElementById('dockSub');
+  const cta=document.getElementById('cta');
+  const toast=document.getElementById('toast');
+  const confirm=document.getElementById('confirm');
+
+  const firstMonth=new Date(parseYmd(firstBookable()).getFullYear(), parseYmd(firstBookable()).getMonth(), 1);
+  const lastDay=addDays(firstBookable(), 56);
+  const lastMonth=new Date(parseYmd(lastDay).getFullYear(), parseYmd(lastDay).getMonth(), 1);
+
+  function renderMenu(){
+    menuEl.innerHTML='';
+    OFFERS.forEach(o=>{
+      const b=document.createElement('button');
+      b.className='chip'+(o.id===offer.id?' on':'');
+      b.setAttribute('role','option');
+      b.setAttribute('aria-selected', o.id===offer.id);
+      b.innerHTML='<b>'+o.name+'</b><em>'+o.blurb+'</em>';
+      b.onclick=()=>{ offer=o; selectedStart=null; selectedPrice=null; render(); };
+      menuEl.appendChild(b);
+    });
+  }
+
+  function monthDays(date){
+    const y=date.getFullYear(), m=date.getMonth();
+    const first=new Date(y,m,1);
+    // Monday-start offset
+    let start=first.getDay(); // 0 sun
+    start = start===0?6:start-1;
+    const daysIn=new Date(y,m+1,0).getDate();
+    // We only show weekdays, so walk every day and skip weekends, keeping empty weekday pads at start.
+    const cells=[];
+    // pad Monday-Friday of first week
+    for(let i=0;i<start;i++){
+      if(i<5) cells.push(null); // weekend pads that fall before Monday... start is Mon-index
+    }
+    // If month starts Sat (start=5) or Sun (start=6):
+    // Sat: 5 pads would be Mon-Fri empty — wrong. Sat start means first weekday is Monday the 3rd, 0 pads of weekdays.
+    // Sun: first weekday is Monday the 2nd, 0 pads.
+    // Recalculate pads as weekday pads only:
+    cells.length=0;
+    const weekdayPad = start>=5 ? 0 : start;
+    for(let i=0;i<weekdayPad;i++) cells.push(null);
+    const minYmd=weekStart(firstBookable());
+    for(let d=1;d<=daysIn;d++){
+      const dt=new Date(y,m,d);
+      const w=dt.getDay();
+      if(w===0||w===6) continue;
+      const mm=String(m+1).padStart(2,'0');
+      const dd=String(d).padStart(2,'0');
+      const ymd=y+'-'+mm+'-'+dd;
+      if(ymd<minYmd || ymd>lastBookable()) continue;
+      cells.push(ymd);
+    }
+    return cells;
+  }
+
+  function fareColor(price, lo, hi){
+    if(hi<=lo) return 'low';
+    const t=(price-lo)/(hi-lo);
+    if(t<.34) return 'low';
+    if(t<.67) return 'mid';
+    return 'high';
+  }
+
+  function renderGrid(){
+    const y=view.getFullYear(), m=view.getMonth();
+    monthLabel.textContent=view.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    prev.disabled = view<=firstMonth;
+    next.disabled = view>=lastMonth;
+    const cells=monthDays(view);
+    // Color scale across the full bookable window, so "green" means cheap in absolute terms.
+    const prices=[];
+    let scan=firstBookable();
+    const end=addDays(firstBookable(), 56);
+    while(scan<=end){
+      const q=dayQuote(offer,scan);
+      if(q.status==='open') prices.push(q.price);
+      scan=addDays(scan,1);
+    }
+    const lo=Math.min(...prices);
+    const hi=Math.max(...prices);
+    gridEl.innerHTML='';
+    cells.forEach(ymd=>{
+      const b=document.createElement('button');
+      if(!ymd){ b.className='cell empty'; b.disabled=true; b.setAttribute('aria-hidden','true'); gridEl.appendChild(b); return; }
+      const q=dayQuote(offer,ymd);
+      const d=parseYmd(ymd).getDate();
+      if(q.status==='closed'){
+        b.className='cell closed';
+        const pl = CLOSED.has(ymd)?'Closed':(isPast(ymd)?'':'');
+        b.innerHTML='<span class="d">'+d+'</span><span class="p">'+pl+'</span>';
+        b.disabled=true;
+      } else if(q.status==='sold'){
+        b.className='cell closed';
+        b.innerHTML='<span class="d">'+d+'</span><span class="p">Full</span>';
+        b.disabled=true;
+      } else {
+        const col=fareColor(q.price,lo,hi);
+        b.className='cell '+col+(selectedDate===ymd?' on':'');
+        b.innerHTML='<span class="d">'+d+'</span><span class="p">'+money(q.price)+'</span>';
+        b.setAttribute('aria-label', fmtDate(ymd)+', from '+money(q.price));
+        b.onclick=()=>{ selectedDate=ymd; selectedStart=null; selectedPrice=null; confirm.classList.remove('on'); render();
+          document.getElementById('dayPanel').scrollIntoView({behavior:'smooth',block:'start'});
+        };
+      }
+      gridEl.appendChild(b);
+    });
+  }
+
+  function renderDay(){
+    if(!selectedDate){ dayPanel.hidden=true; return; }
+    const q=dayQuote(offer, selectedDate);
+    if(q.status!=='open'){ dayPanel.hidden=true; return; }
+    dayPanel.hidden=false;
+    dayTitle.textContent=fmtDate(selectedDate);
+    const dem=DEMAND_NAME[demandLevel(selectedDate)];
+    const heldN=heldSlots(selectedDate).length;
+    const left=4-heldN;
+    if(offer.hours===4){
+      dayMeta.textContent='AI Ramp Day takes this day’s four hours. '+dem+' week. '+daysOut(selectedDate)+' day'+(daysOut(selectedDate)===1?'':'s')+' out.';
+    } else {
+      dayMeta.textContent=left+' of 4 hours open. '+dem+' week. '+daysOut(selectedDate)+' day'+(daysOut(selectedDate)===1?'':'s')+' out.';
+    }
+    slotsEl.innerHTML='';
+    if(offer.hours===4){
+      const b=document.createElement('button');
+      const on=selectedStart===9;
+      b.className='slot'+(on?' on':'');
+      b.innerHTML='<span class="t">Full day, 9 AM – 4 PM</span><span class="pr">'+money(q.price)+'</span>';
+      b.onclick=()=>{ selectedStart=9; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
+        document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
+      slotsEl.appendChild(b);
+      return;
+    }
+    if(offer.hours===2){
+      q.starts.forEach(h=>{
+        const b=document.createElement('button');
+        const on=selectedStart===h;
+        b.className='slot'+(on?' on':'');
+        b.innerHTML='<span class="t">'+hourLabel(h)+' – '+hourLabel(h+2)+'</span><span class="pr">'+money(q.price)+'</span>';
+        b.onclick=()=>{ selectedStart=h; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
+          document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
+        slotsEl.appendChild(b);
+      });
+      // show held hours as context
+      heldSlots(selectedDate).forEach(h=>{
+        const b=document.createElement('button');
+        b.className='slot held'; b.disabled=true;
+        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">Held</span>';
+        slotsEl.appendChild(b);
+      });
+      return;
+    }
+    SLOTS.forEach(h=>{
+      const b=document.createElement('button');
+      if(q.held.includes(h)){
+        b.className='slot held'; b.disabled=true;
+        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">Held</span>';
+      } else {
+        const on=selectedStart===h;
+        b.className='slot'+(on?' on':'');
+        b.innerHTML='<span class="t">'+hourLabel(h)+'</span><span class="pr">'+money(q.price)+'</span>';
+        b.onclick=()=>{ selectedStart=h; selectedPrice=q.price; confirm.classList.remove('on'); renderDock();
+          document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); b.classList.add('on'); };
+      }
+      slotsEl.appendChild(b);
+    });
+  }
+
+  function whenText(){
+    if(!selectedDate || selectedStart==null) return '';
+    if(offer.hours===4) return fmtShort(selectedDate)+', 9 AM – 4 PM PT';
+    if(offer.hours===2) return fmtShort(selectedDate)+', '+hourLabel(selectedStart)+'–'+hourLabel(selectedStart+2)+' PT';
+    return fmtShort(selectedDate)+', '+hourLabel(selectedStart)+' PT';
+  }
+
+  function renderDock(){
+    if(selectedStart!=null && selectedPrice!=null){
+      dockPrice.textContent=money(selectedPrice);
+      dockSub.textContent=offer.name+' · '+whenText();
+      cta.disabled=false;
+    } else if(selectedDate){
+      const q=dayQuote(offer,selectedDate);
+      dockPrice.textContent=q.price?money(q.price):'Pick a time';
+      dockSub.textContent=offer.name+' · '+fmtShort(selectedDate)+' · pick a time';
+      cta.disabled=true;
+    } else {
+      dockPrice.textContent='Choose a date';
+      dockSub.textContent=offer.name+' · fares in Pacific time';
+      cta.disabled=true;
+    }
+  }
+
+  function render(){
+    renderMenu();
+    renderGrid();
+    renderDay();
+    renderDock();
+  }
+
+  prev.onclick=()=>{ if(view>firstMonth){ view=new Date(view.getFullYear(), view.getMonth()-1, 1); render(); } };
+  next.onclick=()=>{ if(view<lastMonth){ view=new Date(view.getFullYear(), view.getMonth()+1, 1); render(); } };
+
+  cta.onclick=()=>{
+    if(cta.disabled) return;
+    document.getElementById('cOff').textContent=offer.name;
+    document.getElementById('cWhen').textContent=whenText();
+    document.getElementById('cFare').textContent=money(selectedPrice);
+    confirm.classList.add('on');
+    confirm.scrollIntoView({behavior:'smooth',block:'center'});
+    toast.classList.add('on');
+    setTimeout(()=>toast.classList.remove('on'), 3200);
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
